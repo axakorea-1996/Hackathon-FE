@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AXA 다이렉트 자동차보험 청약</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --axa-navy: #00008F;
+    --axa-blue: #1B1FBF;
+    --axa-red: #FF1721;
+    --axa-light: #F0F0FF;
+    --axa-mid: #E5E5FF;
+    --text-primary: #1A1A2E;
+    --text-secondary: #6B6B8A;
+    --text-muted: #9999B3;
+    --bg-page: #F4F5FF;
+    --bg-card: #FFFFFF;
+    --border: #E2E2F0;
+    --success: #00C48C;
+    --warning: #FFB800;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --shadow-sm: 0 2px 8px rgba(0,0,143,0.06);
+    --shadow-md: 0 8px 32px rgba(0,0,143,0.12);
+    --shadow-lg: 0 20px 60px rgba(0,0,143,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .header-inner {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-box {
+    background: var(--axa-navy);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .header-tag {
+    background: var(--axa-red);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ─── PROGRESS ─── */
+  .progress-wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 20px 0;
+  }
+  .step-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 4px;
+  }
+  .step-label {
+    flex: 1;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    line-height: 1.3;
+  }
+  .step-label.active { color: var(--axa-navy); }
+  .step-label.done { color: var(--success); }
+
+  .step-dots {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 6px;
+  }
+  .dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-muted);
+    transition: all 0.3s;
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+  }
+  .dot.done {
+    background: var(--success);
+    color: white;
+  }
+  .dot.active {
+    background: var(--axa-navy);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(0,0,143,0.15);
+    width: 32px; height: 32px;
+  }
+  .dot-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .dot-line.done { background: var(--success); }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--axa-navy), var(--axa-blue));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ─── CARD ─── */
+  .main {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-md);
+    animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1);
+    border: 1px solid rgba(0,0,143,0.05);
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--axa-light);
+    color: var(--axa-navy);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .step-badge .num {
+    background: var(--axa-navy);
+    color: white;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+  }
+
+  .card-title {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .card-title .accent { color: var(--axa-navy); }
+  .card-title .red { color: var(--axa-red); }
+
+  .card-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* ─── FORM ELEMENTS ─── */
+  .field-group { margin-bottom: 20px; }
+  .field-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+    letter-spacing: 0.3px;
+  }
+  .field-label .required {
+    color: var(--axa-red);
+    font-size: 16px; line-height: 1;
+  }
+
+  .input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: white;
+    transition: all 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .input:focus {
+    border-color: var(--axa-navy);
+    box-shadow: 0 0 0 3px rgba(0,0,143,0.1);
+  }
+  .input::placeholder { color: var(--text-muted); }
+  .input.filled { border-color: var(--axa-navy); background: var(--axa-light); }
+
+  .input-row {
+    display: flex; gap: 8px;
+  }
+  .input-row .input { flex: 1; }
+
+  select.input {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+
+  /* ─── BUTTON ─── */
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--axa-navy), var(--axa-blue));
+    color: white;
+    box-shadow: 0 4px 16px rgba(0,0,143,0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0,0,143,0.4);
+  }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-outline {
+    background: transparent;
+    color: var(--axa-navy);
+    border: 2px solid var(--axa-navy);
+  }
+  .btn-outline:hover { background: var(--axa-light); }
+  .btn-sm {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+    margin-top: 0;
+  }
+  .btn-red {
+    background: linear-gradient(135deg, #FF1721, #FF4D55);
+    color: white;
+    box-shadow: 0 4px 16px rgba(255,23,33,0.3);
+  }
+
+  /* ─── CHECKBOX / TERMS ─── */
+  .terms-all {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px;
+    background: var(--axa-light);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-bottom: 16px;
+    border: 2px solid var(--axa-mid);
+    transition: all 0.2s;
+  }
+  .terms-all.checked { border-color: var(--axa-navy); }
+  .terms-all span {
+    font-size: 15px; font-weight: 700; color: var(--text-primary);
+  }
+
+  .check-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .check-box.checked {
+    background: var(--axa-navy);
+    border-color: var(--axa-navy);
+  }
+  .check-box.checked::after {
+    content: '';
+    width: 12px; height: 7px;
+    border-left: 2.5px solid white;
+    border-bottom: 2.5px solid white;
+    transform: rotate(-45deg) translateY(-2px);
+    display: block;
+  }
+
+  .terms-list { display: flex; flex-direction: column; gap: 0; }
+  .term-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .term-item:last-child { border-bottom: none; }
+  .term-text { flex: 1; font-size: 13px; color: var(--text-primary); }
+  .term-text .required-tag {
+    color: var(--axa-navy); font-weight: 700; font-size: 11px;
+  }
+  .term-text .opt-tag {
+    color: var(--text-muted); font-weight: 600; font-size: 11px;
+  }
+  .arrow-btn {
+    color: var(--text-muted); font-size: 18px; flex-shrink: 0;
+  }
+
+  /* ─── VEHICLE CARD ─── */
+  .vehicle-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .vehicle-card:hover { border-color: var(--axa-navy); background: var(--axa-light); }
+  .vehicle-card.selected {
+    border-color: var(--axa-navy);
+    background: var(--axa-light);
+    box-shadow: 0 0 0 1px var(--axa-navy);
+  }
+  .vehicle-img {
+    width: 70px; height: 45px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .vehicle-emoji {
+    font-size: 36px; flex-shrink: 0; width: 56px; text-align: center;
+  }
+  .vehicle-info { flex: 1; }
+  .vehicle-plate {
+    background: var(--axa-navy);
+    color: white;
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px;
+    display: inline-block; margin-bottom: 6px;
+  }
+  .vehicle-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .vehicle-date { font-size: 11px; color: var(--text-muted); }
+  .vehicle-add {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .vehicle-add:hover { border-color: var(--axa-navy); color: var(--axa-navy); }
+  .add-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--axa-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--axa-navy);
+  }
+
+  /* ─── INFO BOX ─── */
+  .info-box {
+    background: var(--axa-light);
+    border-left: 3px solid var(--axa-navy);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .info-box .info-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; font-weight: 600; }
+  .info-box .info-val { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+  .info-box .info-price { font-size: 22px; font-weight: 800; color: var(--axa-navy); }
+
+  /* ─── CHIP SELECTOR ─── */
+  .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 10px 18px;
+    border-radius: 30px;
+    border: 2px solid var(--border);
+    background: white;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-secondary);
+  }
+  .chip:hover { border-color: var(--axa-navy); color: var(--axa-navy); }
+  .chip.selected {
+    background: var(--axa-navy);
+    border-color: var(--axa-navy);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,143,0.2);
+  }
+
+  /* ─── DRIVER VISUAL ─── */
+  .driver-visual {
+    display: flex; justify-content: center;
+    gap: 20px; flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .driver-figure {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 12px 16px; border-radius: var(--radius-md);
+    border: 2px solid var(--border);
+    cursor: pointer; transition: all 0.2s;
+    min-width: 80px;
+  }
+  .driver-figure.selected {
+    border-color: var(--axa-navy);
+    background: var(--axa-light);
+  }
+  .driver-figure.muted { opacity: 0.35; }
+  .driver-avatar { font-size: 32px; }
+  .driver-name { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+  .driver-figure.selected .driver-name { color: var(--axa-navy); }
+
+  /* ─── PRICE BOX ─── */
+  .price-summary {
+    background: linear-gradient(135deg, var(--axa-navy), var(--axa-blue));
+    border-radius: var(--radius-md);
+    padding: 20px;
+    color: white;
+    margin-bottom: 16px;
+  }
+  .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .price-row:last-child { margin-bottom: 0; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 12px; margin-top: 4px; }
+  .price-label { font-size: 13px; opacity: 0.8; }
+  .price-val { font-size: 13px; font-weight: 600; }
+  .price-val.strike { text-decoration: line-through; opacity: 0.6; }
+  .price-val.big { font-size: 26px; font-weight: 800; }
+  .price-val.discount { color: #FFE066; }
+
+  /* ─── PAYMENT ─── */
+  .pay-tabs {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .pay-tab {
+    flex: 1; padding: 12px; border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    text-align: center; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    transition: all 0.2s;
+  }
+  .pay-tab.active { border-color: var(--axa-navy); color: var(--axa-navy); background: var(--axa-light); }
+
+  .card-input-group {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* ─── SUCCESS ─── */
+  .success-wrap {
+    text-align: center; padding: 10px 0 20px;
+  }
+  .success-emoji { font-size: 64px; margin-bottom: 16px; display: block; animation: bounce 0.6s ease; }
+  @keyframes bounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .success-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .success-title .name { color: var(--axa-navy); }
+  .success-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; }
+
+  .benefit-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .benefit-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    background: var(--axa-light);
+    border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 600;
+  }
+  .benefit-icon { font-size: 20px; }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    z-index: 50;
+  }
+  .bottom-bar-inner { max-width: 480px; margin: 0 auto; display: flex; gap: 10px; }
+
+  /* ─── NOTICE ─── */
+  .notice {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 12px 14px;
+    background: #FFF8E1;
+    border-radius: var(--radius-sm);
+    font-size: 12px; color: #7A5F00;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  /* ─── DETAIL ROW ─── */
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { color: var(--text-secondary); }
+  .detail-val { font-weight: 600; color: var(--text-primary); }
+
+  /* ─── SPECIAL COVERAGE ─── */
+  .coverage-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .coverage-item:last-child { border-bottom: none; }
+  .coverage-left { flex: 1; }
+  .coverage-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .coverage-desc { font-size: 12px; color: var(--text-muted); }
+  .toggle {
+    width: 44px; height: 24px;
+    border-radius: 12px;
+    background: var(--border);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+  .toggle.on { background: var(--axa-navy); }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: white;
+    top: 3px; left: 3px;
+    transition: transform 0.25s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .toggle.on::after { transform: translateX(20px); }
+
+  /* ─── SCROLL AREA ─── */
+  .scroll-box {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
+  .scroll-box::-webkit-scrollbar { width: 4px; }
+  .scroll-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ─── SECTION TAG ─── */
+  .section-tag {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 12px; margin-top: 20px;
+  }
+
+  /* ─── TOOLTIP ─── */
+  .tip-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #E8F5E9; color: #2E7D32;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 8px; border-radius: 20px;
+  }
+
+  .saving-badge {
+    background: linear-gradient(135deg, #FF1721, #FF6B6B);
+    color: white;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-box">AXA</div>
+      <span class="logo-sub">다이렉트 자동차보험</span>
+    </div>
+    <div class="header-tag">청약하기</div>
+  </div>
+</header>
+
+<div class="progress-wrap" id="progressArea">
+  <div class="step-dots" id="stepDots"></div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<div class="bottom-bar">
+  <div class="bottom-bar-inner" id="bottomBar"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────
+const state = {
+  step: 1,
+  totalSteps: 9,
+  name: '김악사',
+  termsAll: false,
+  terms: [false, false, false, false, false],
+  selectedVehicle: 0,
+  vehiclePlate: '',
+  vehicleType: '',
+  driverScope: '부부',
+  coverages: [true, false, true],
+  payMethod: '일반카드',
+  cardNumber: ['1234','5678','9101','1234'],
+  toggles: [false, true, false],
+};
+
+const STEPS = [
+  '약관동의','차량조회','차량확인','운전자','설계완료','특약등록','보험확인','보험결제','가입완료'
+];
+
+const VEHICLES = [
+  { plate: '35ㅏ4321', name: '현대 쏘나타', date: '2023.08.01 – 2023.08.31', emoji: '🚙' },
+  { plate: '35ㅏ4321', name: '기아 K5',     date: '2023.08.01 – 2023.08.31', emoji: '🚗' },
+];
+
+// ─────────────────────────────────────────
+//  RENDER ENGINE
+// ─────────────────────────────────────────
+function render() {
+  renderProgress();
+  renderStep();
+  renderBottom();
+}
+
+function renderProgress() {
+  const pct = ((state.step - 1) / (state.totalSteps - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const dots = document.getElementById('stepDots');
+  let html = '';
+  STEPS.forEach((s, i) => {
+    const n = i + 1;
+    if (i > 0) {
+      const lineClass = n <= state.step ? 'done' : '';
+      html += `<div class="dot-line ${lineClass}"></div>`;
+    }
+    const cls = n < state.step ? 'done' : n === state.step ? 'active' : '';
+    const inner = n < state.step ? '✓' : n;
+    html += `<div class="dot ${cls}">${inner}</div>`;
+  });
+  dots.innerHTML = html;
+}
+
+function renderBottom() {
+  const bar = document.getElementById('bottomBar');
+  if (state.step === 9) {
+    bar.innerHTML = `<button class="btn btn-primary" onclick="goHome()">🏠 홈으로</button>`;
+    return;
+  }
+  let backBtn = state.step > 1
+    ? `<button class="btn btn-outline" style="max-width:90px" onclick="prev()">← 이전</button>` : '';
+
+  let nextLabel = '다음';
+  if (state.step === 5) nextLabel = '특약 정보 등록 →';
+  if (state.step === 7) nextLabel = '결제 정보 입력 →';
+  if (state.step === 8) nextLabel = `${formatNum(1042280)}원 결제`;
+
+  bar.innerHTML = backBtn + `<button class="btn btn-primary" onclick="next()">${nextLabel}</button>`;
+}
+
+function renderStep() {
+  const el = document.getElementById('mainContent');
+  const builders = [step1,step2,step3,step4,step5,step6,step7,step8,step9];
+  el.innerHTML = builders[state.step - 1]();
+  attachListeners();
+}
+
+// ─────────────────────────────────────────
+//  STEP BUILDERS
+// ─────────────────────────────────────────
+function stepBadge(n, label) {
+  return `<div class="step-badge"><span class="num">${n}</span>${label}</div>`;
+}
+
+function step1() {
+  const terms = [
+    ['[필수] 수집이용에 관한 사항','required'],
+    ['[필수] 제공에 관한 사항','required'],
+    ['[필수] 조회에 관한 사항','required'],
+    ['소비자 권익보호에 관한 사항','opt'],
+    ['[선택] 개인(신용)정보 수집·이용에 관한 사항','opt'],
+  ];
+  let termHtml = terms.map((t,i) => `
+    <div class="term-item" onclick="toggleTerm(${i})">
+      <div class="check-box ${state.terms[i]?'checked':''}"></div>
+      <div class="term-text">
+        <span class="${t[1]==='required'?'required-tag':'opt-tag'}">${t[1]==='required'?'[필수]':'[선택]'} </span>${t[0].replace('[필수] ','').replace('[선택] ','')}
+      </div>
+      <span class="arrow-btn">›</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="card">
+      ${stepBadge(1,'약관 동의')}
+      <h2 class="card-title">보험료를 계산하기 위해<br><span class="accent">약관동의</span>가 필요해요</h2>
+      <p class="card-subtitle">서비스 이용을 위해 아래 내용에 동의해 주세요</p>
+
+      <div class="terms-all ${state.termsAll?'checked':''}" onclick="toggleAll()">
+        <div class="check-box ${state.termsAll?'checked':''}"></div>
+        <span>전체동의</span>
+        <span style="margin-left:auto;font-size:12px;color:var(--text-muted)">필수+선택 모두 포함</span>
+      </div>
+
+      <div class="terms-list">${termHtml}</div>
+
+      <div class="notice" style="margin-top:16px">
+        ℹ️ 필수 항목에 동의하지 않으시면 서비스 이용이 제한될 수 있어요.
+      </div>
+    </div>
+  `;
+}
+
+function step2() {
+  let vehicleHtml = VEHICLES.map((v,i) => `
+    <div class="vehicle-card ${state.selectedVehicle===i?'selected':''}" onclick="selectVehicle(${i})">
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+        <span class="vehicle-emoji">${v.emoji}</span>
+      </div>
+      <div class="vehicle-info">
+        <div class="vehicle-plate">${v.plate}</div>
+        <div class="vehicle-name">${v.name}</div>
+        <div class="vehicle-date">${v.date}</div>
+      </div>
+      <div style="color:var(--axa-navy);font-size:20px;margin-left:auto">${state.selectedVehicle===i?'✓':''}</div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="card">
+      ${stepBadge(2,'차량 조회')}
+      <h2 class="card-title"><span class="accent">${state.name}</span>님,<br>조회할 차량을 선택해 주세요</h2>
+      <p class="card-subtitle">보험 가입 이력이 있는 차량이 조회됩니다</p>
+
+      ${vehicleHtml}
+
+      <div class="vehicle-add" onclick="addVehicle()">
+        <div class="add-icon">+</div>
+        차량 신규등록 (중고차 포함)
+      </div>
+
+      <div style="margin-top:20px">
+        <div class="field-label">차량번호 직접 입력</div>
+        <div class="input-row">
+          <input class="input ${state.vehiclePlate?'filled':''}" placeholder="예) 35ㅏ4321" value="${state.vehiclePlate}" oninput="setState('vehiclePlate',this.value)" />
+          <button class="btn btn-primary btn-sm" onclick="searchVehicle()" style="width:80px">조회</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function step3() {
+  return `
+    <div class="card">
+      ${stepBadge(3,'차량 정보 확인')}
+      <h2 class="card-title"><span class="accent">차량 정보</span>를<br>확인해 주세요</h2>
+      <p class="card-subtitle">아래 정보가 맞는지 확인하고, 잘못된 경우 수정해 주세요</p>
+
+      <div class="info-box">
+        <div class="info-label">차량</div>
+        <div class="info-val">현대 쏘나타</div>
+      </div>
+
+      <div class="detail-row"><span class="detail-key">연식</span><span class="detail-val">2023년 2월 10일 이전</span></div>
+      <div class="detail-row"><span class="detail-key">모델</span><span class="detail-val">쏘나타 L2.5 터보 N LINE</span></div>
+      <div class="detail-row"><span class="detail-key">옵션</span><span class="detail-val">EV, 모터, 에어컨, P/S, ABS, AIR-D, IM, 5인승</span></div>
+      <div class="detail-row">
+        <span class="detail-key">등급</span>
+        <span class="detail-val" style="color:var(--axa-blue);font-weight:800">프리미엄</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field-group">
+        <div class="field-label">운행형태 <span class="required">*</span></div>
+        <select class="input">
+          <option>해당없음</option>
+          <option>출퇴근용</option>
+          <option>영업용</option>
+          <option>레저용</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">전기차 기입사항</div>
+        <input class="input" placeholder="해당사항 없으면 비워두세요" />
+      </div>
+
+      <div class="notice">
+        ⚡ 전기차·하이브리드 차량은 추가 할인 혜택이 제공됩니다.
+      </div>
+    </div>
+  `;
+}
+
+function step4() {
+  const scopes = [
+    { label: '본인', icon: '🧑', active: true },
+    { label: '부부', icon: '👫', active: true },
+    { label: '지정 1인', icon: '👤', active: false },
+    { label: '누구나', icon: '👥', active: false },
+    { label: '가족(형제자매제외)', icon: '👨‍👩‍👧', active: false },
+    { label: '가족(형제자매포함)', icon: '👨‍👩‍👧‍👦', active: false },
+    { label: '임직원', icon: '🏢', active: false },
+  ];
+
+  const driverFigures = [
+    { label: '나의 부모', emoji: '👴', muted: state.driverScope === '본인' || state.driverScope === '부부' },
+    { label: '부부의 부모', emoji: '👵', muted: state.driverScope === '본인' || state.driverScope === '부부' },
+    { label: '나', emoji: '🧑', muted: false },
+    { label: '배우자', emoji: '👰', muted: state.driverScope === '본인' },
+    { label: '나의 형제, 자매', emoji: '🧑‍🤝‍🧑', muted: true },
+  ];
+
+  return `
+    <div class="card">
+      ${stepBadge(4,'운전자 선택')}
+      <h2 class="card-title">누가 운전하나요?<br><span class="accent">운전자 범위</span>를 선택해 주세요</h2>
+      <p class="card-subtitle">선택 범위에 따라 보험료가 달라져요</p>
+
+      <div class="chip-group">
+        ${scopes.map(s => `
+          <div class="chip ${state.driverScope===s.label?'selected':''}" onclick="setState('driverScope','${s.label}')">${s.label}</div>
+        `).join('')}
+      </div>
+
+      <div class="driver-visual" style="margin-top:20px">
+        ${driverFigures.map(f => `
+          <div class="driver-figure ${f.muted?'muted':'selected'}">
+            <div class="driver-avatar">${f.emoji}</div>
+            <div class="driver-name">${f.label}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="notice" style="margin-top:0">
+        💡 <strong>부부 한정</strong> 선택 시 타인 운전 중 사고는 보상되지 않습니다.
+      </div>
+    </div>
+  `;
+}
+
+function step5() {
+  return `
+    <div class="card">
+      ${stepBadge(5,'보험 설계 완료')}
+      <h2 class="card-title"><span class="accent">${state.name}</span>님, 합리적인 가격으로<br>설계가 잘 되었어요 🎉</h2>
+
+      <div class="price-summary">
+        <div class="price-row">
+          <span class="price-label">총 보험료</span>
+          <span class="price-val strike">1,612,310원</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">할인 보험료</span>
+          <span class="price-val discount">-592,370원 ↓</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label" style="font-weight:700;font-size:15px">결제할 보험료</span>
+          <span class="price-val big">1,019,640원</span>
+        </div>
+      </div>
+
+      <div class="section-tag">내 보장 확인해 보세요</div>
+
+      <div class="detail-row">
+        <span class="detail-key">대인배상 ①</span>
+        <span class="detail-val tip-chip">✓ 가입</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">대인배상 ②</span>
+        <span class="detail-val">무한</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">대물배상</span>
+        <span class="detail-val">2억원</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">자기신체사고</span>
+        <span class="detail-val">사망/후유 5,000만원</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">자기차량손해</span>
+        <span class="detail-val">가입 · 자기부담금 30만원</span>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline" style="flex:1;margin-top:0">내 보장 보기</button>
+          <button class="btn btn-outline" style="flex:1;margin-top:0">내 특약 보기</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function step6() {
+  const specials = [
+    { name: '마일리지 특약', desc: '신청 / 2,000Km | 차량계기판·반환 사진 등록', on: state.toggles[0] },
+    { name: '블랙박스 특약', desc: '차량 내 블랙박스 사진, 차량전면사진 등록', on: state.toggles[1] },
+    { name: '자녀 할인 특약', desc: '자녀 이름과 주민등록번호를 등록', on: state.toggles[2] },
+  ];
+
+  return `
+    <div class="card">
+      ${stepBadge(6,'특약 정보 등록')}
+      <h2 class="card-title"><span class="accent">할인특약</span> 확인을 위해<br>정보를 등록해 주세요</h2>
+      <p class="card-subtitle">특약 등록 시 추가 할인 혜택을 받을 수 있어요</p>
+
+      ${specials.map((s,i) => `
+        <div class="coverage-item">
+          <div class="coverage-left">
+            <div class="coverage-name">${s.name}</div>
+            <div class="coverage-desc">${s.desc}</div>
+          </div>
+          <div class="toggle ${s.on?'on':''}" onclick="toggleSpecial(${i})"></div>
+        </div>
+      `).join('')}
+
+      <div class="divider"></div>
+      <div class="notice">
+        📸 나중에 등록하셔도 할인 적용이 가능합니다. 지금은 건너뛰어도 괜찮아요!
+      </div>
+    </div>
+  `;
+}
+
+function step7() {
+  return `
+    <div class="card">
+      ${stepBadge(7,'보험 내용 확인')}
+      <h2 class="card-title">거의 다 왔어요! 🏁<br><span class="accent">보험 내용</span> 확인 및 약관에<br>동의해주세요</h2>
+
+      <div class="section-tag">자동차보험 상품설명서</div>
+
+      <div class="scroll-box">
+        <div class="detail-row"><span class="detail-key">보험기간</span><span class="detail-val">2023.08.08 – 2024.08.08</span></div>
+        <div class="detail-row"><span class="detail-key">피보험자동차</span><span class="detail-val">35ㅏ4321(쏘나타 2.5 N LINE)</span></div>
+        <div class="detail-row"><span class="detail-key">보험계약자</span><span class="detail-val">김악사</span></div>
+        <div class="detail-row"><span class="detail-key">보험계약피보장자</span><span class="detail-val">김악사</span></div>
+        <div class="detail-row"><span class="detail-key">물적사고할증기준금액</span><span class="detail-val">200만원</span></div>
+        <div class="detail-row"><span class="detail-key">최종 보험료</span><span class="detail-val" style="color:var(--axa-navy);font-weight:800">1,042,280원</span></div>
+      </div>
+
+      <div class="terms-all ${state.termsAll?'checked':''}" onclick="toggleAll()">
+        <div class="check-box ${state.termsAll?'checked':''}"></div>
+        <span>약관 내용 모두 확인했어요</span>
+      </div>
+
+      <div class="terms-list">
+        <div class="term-item" onclick="toggleTerm(0)">
+          <div class="check-box ${state.terms[0]?'checked':''}"></div>
+          <div class="term-text"><span class="required-tag">[필수]</span> 자동차보험 약관 동의</div>
+          <span class="arrow-btn">›</span>
+        </div>
+        <div class="term-item" onclick="toggleTerm(1)">
+          <div class="check-box ${state.terms[1]?'checked':''}"></div>
+          <div class="term-text"><span class="required-tag">[필수]</span> 전자청약 확인서 동의</div>
+          <span class="arrow-btn">›</span>
+        </div>
+        <div class="term-item" onclick="toggleTerm(2)">
+          <div class="check-box ${state.terms[2]?'checked':''}"></div>
+          <div class="term-text"><span class="opt-tag">[선택]</span> 마케팅 활용 동의</div>
+          <span class="arrow-btn">›</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function step8() {
+  const methods = ['일반카드','앱카드','AXA easycard'];
+  return `
+    <div class="card">
+      ${stepBadge(8,'보험료 결제')}
+      <h2 class="card-title">보험료 <span class="red">${formatNum(1042280)}원</span>을<br>결제하기 위해<br>정보를 입력해 주세요</h2>
+      <p class="card-subtitle">안전한 암호화 결제로 처리됩니다 🔒</p>
+
+      <div class="section-tag">결제수단 선택</div>
+      <div class="pay-tabs">
+        ${methods.map(m => `<div class="pay-tab ${state.payMethod===m?'active':''}" onclick="setState('payMethod','${m}')">${m}</div>`).join('')}
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">카드 소유자 <span class="required">*</span></div>
+        <input class="input filled" value="${state.name}" oninput="setState('name',this.value)" />
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">카드번호 <span class="required">*</span></div>
+        <div class="card-input-group">
+          ${state.cardNumber.map((v,i) => `
+            <input class="input filled" maxlength="4" value="${v}"
+              oninput="updateCard(${i},this.value)"
+              placeholder="****" />
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="input-row">
+          <div style="flex:1">
+            <div class="field-label">유효기간</div>
+            <input class="input" placeholder="MM / YY" maxlength="5" />
+          </div>
+          <div style="flex:1">
+            <div class="field-label">CVC</div>
+            <input class="input" placeholder="***" maxlength="3" type="password" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">할부</div>
+        <select class="input">
+          <option>일시불</option>
+          <option>3개월</option>
+          <option>6개월</option>
+          <option>12개월</option>
+        </select>
+      </div>
+
+      <div class="notice">
+        💳 AXA easycard 결제 시 추가 5% 할인 혜택이 제공됩니다.
+      </div>
+    </div>
+  `;
+}
+
+function step9() {
+  return `
+    <div class="card">
+      ${stepBadge(9,'가입 완료')}
+      <div class="success-wrap">
+        <span class="success-emoji">🤞</span>
+        <h2 class="success-title"><span class="name">${state.name}</span>님,<br>AXA다이렉트자동차보험<br>가입을 감사드려요!</h2>
+        <p class="success-desc">증권번호 <strong>AXA-2023-084521</strong><br>
+        보험기간: 2023.08.08 – 2024.08.08<br>
+        보험료: <strong>${formatNum(1042280)}원</strong> 결제 완료</p>
+      </div>
+
+      <div class="section-tag">주요 혜택</div>
+      <div class="benefit-list">
+        <div class="benefit-item"><span class="benefit-icon">🎫</span>주유권 쿠폰 제공</div>
+        <div class="benefit-item"><span class="benefit-icon">🎁</span>16종 장비쿠폰 등 풍성한 혜택</div>
+        <div class="benefit-item"><span class="benefit-icon">📱</span>AXA 앱에서 증권 확인 가능</div>
+        <div class="benefit-item"><span class="benefit-icon">🚨</span>24시간 긴급출동 서비스</div>
+      </div>
+
+      <div class="saving-badge" style="margin-bottom:12px">💰 총 592,370원 절약했어요!</div>
+    </div>
+  `;
+}
+
+// ─────────────────────────────────────────
+//  LISTENERS / ACTIONS
+// ─────────────────────────────────────────
+function attachListeners() {}
+
+function toggleAll() {
+  state.termsAll = !state.termsAll;
+  state.terms = state.terms.map(() => state.termsAll);
+  render();
+}
+
+function toggleTerm(i) {
+  state.terms[i] = !state.terms[i];
+  state.termsAll = state.terms.every(Boolean);
+  render();
+}
+
+function selectVehicle(i) {
+  state.selectedVehicle = i;
+  render();
+}
+
+function searchVehicle() { render(); }
+function addVehicle() { alert('차량 신규 등록 기능은 준비 중입니다.'); }
+
+function setState(key, val) {
+  state[key] = val;
+  // only re-render for chip selectors (driver scope, pay method)
+  if (key === 'driverScope' || key === 'payMethod') render();
+}
+
+function updateCard(i, val) {
+  state.cardNumber[i] = val;
+}
+
+function toggleSpecial(i) {
+  state.toggles[i] = !state.toggles[i];
+  render();
+}
+
+function formatNum(n) {
+  return n.toLocaleString('ko-KR');
+}
+
+function next() {
+  if (state.step < state.totalSteps) {
+    state.step++;
+    // reset term state for step 7
+    if (state.step === 7) { state.termsAll = false; state.terms = [false,false,false,false,false]; }
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function prev() {
+  if (state.step > 1) {
+    state.step--;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function goHome() {
+  state.step = 1;
+  state.termsAll = false;
+  state.terms = [false,false,false,false,false];
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
