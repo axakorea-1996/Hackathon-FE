@@ -1,8 +1,7 @@
-function StepBadge({ n, label }) {
+function StepBadge() {
   return (
     <div className="step-badge">
-      <span className="num">{n}</span>
-      {label}
+      <span className="num"></span>
     </div>
   )
 }
