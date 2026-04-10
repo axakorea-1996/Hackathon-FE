@@ -1,0 +1,237 @@
+/* ===============================
+   ROOT & RESET
+=============================== */
+:root {
+  --axa-navy: #00008F;
+  --axa-blue: #1B1FBF;
+  --axa-red: #FF1721;
+  --axa-light: #F0F0FF;
+  --axa-mid: #E5E5FF;
+  --text-primary: #1A1A2E;
+  --text-secondary: #6B6B8A;
+  --text-muted: #9999B3;
+  --bg-page: #F4F5FF;
+  --bg-card: #FFFFFF;
+  --border: #E2E2F0;
+  --success: #00C48C;
+  --warning: #FFB800;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 2px 8px rgba(0,0,143,0.06);
+  --shadow-md: 0 8px 32px rgba(0,0,143,0.12);
+  --shadow-lg: 0 20px 60px rgba(0,0,143,0.18);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   HEADER
+=============================== */
+.header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-box {
+  background: var(--axa-navy);
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.logo-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.header-tag {
+  background: var(--axa-red);
+  color: white;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* ===============================
+   PROGRESS
+=============================== */
+.progress-wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+}
+
+.step-dots {
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.dot.active {
+  background: var(--axa-navy);
+  color: white;
+}
+
+.dot.done {
+  background: var(--success);
+  color: white;
+}
+
+.dot-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+}
+
+.dot-line.done {
+  background: var(--success);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--axa-navy), var(--axa-blue));
+}
+
+/* ===============================
+   CARD
+=============================== */
+.main {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 20px 100px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-md);
+}
+
+/* ===============================
+   BUTTON
+=============================== */
+.btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--axa-navy), var(--axa-blue));
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--axa-navy);
+  color: var(--axa-navy);
+}
+
+/* ===============================
+   INPUT
+=============================== */
+.input {
+  width: 100%;
+  padding: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.input:focus {
+  border-color: var(--axa-navy);
+}
+
+/* ===============================
+   VEHICLE CARD
+=============================== */
+.vehicle-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.vehicle-card.selected {
+  border-color: var(--axa-navy);
+  background: var(--axa-light);
+}
+
+/* ===============================
+   BOTTOM BAR
+=============================== */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+}
+
+.bottom-bar-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
