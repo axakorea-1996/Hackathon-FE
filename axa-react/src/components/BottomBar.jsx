@@ -3,11 +3,15 @@ function formatNum(n) {
 }
 
 function BottomBar({ state, actions }) {
+  if (!state) return null
+
   if (state.step === 9) {
     return (
       <div className="bottom-bar">
-        <div className="bottom-bar-inner">
-          <button className="btn btn-primary" onClick={actions.goHome}>🏠 홈으로</button>
+        <div className="bottom-bar-inner" id="bottomBar">
+          <button className="btn btn-primary" onClick={actions.goHome}>
+            🏠 홈으로
+          </button>
         </div>
       </div>
     )
@@ -20,13 +24,20 @@ function BottomBar({ state, actions }) {
 
   return (
     <div className="bottom-bar">
-      <div className="bottom-bar-inner">
-        {state.step > 1 && (
-          <button className="btn btn-outline" style={{ maxWidth: 90 }} onClick={actions.prev}>
+      <div className="bottom-bar-inner" id="bottomBar">
+        {state.step > 1 ? (
+          <button
+            className="btn btn-outline"
+            style={{ maxWidth: '90px' }}
+            onClick={actions.prev}
+          >
             ← 이전
           </button>
-        )}
-        <button className="btn btn-primary" onClick={actions.next}>{nextLabel}</button>
+        ) : null}
+
+        <button className="btn btn-primary" onClick={actions.next}>
+          {nextLabel}
+        </button>
       </div>
     </div>
   )
