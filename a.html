@@ -995,10 +995,7 @@ function showShell(id) {
 }
 function goMain()         { showShell('shellMain'); refreshMainMySection(); }
 function goSubscription() { S.step=1; showShell('shellSub'); renderSub(); }
-async function goMyPage() {
-  showShell('shellMy');
-  await renderMyPage();
-}
+function goMyPage()       { showShell('shellMy'); renderMyPage(); }
 
 /* ─────────────────────────────────────────
    PROGRESS
@@ -1047,60 +1044,24 @@ function nextStep(){
 function prevStep(){
   if(S.step>1){ S.step--; renderSub(); window.scrollTo({top:0,behavior:'smooth'}); }
 }
-
-async function finishAndGoHome(){
+function finishAndGoHome(){
+  // Save to DB
   const veh = VEHICLES.find(v=>v.id===S.selectedV)||VEHICLES[0];
-
-  try {
-    const res = await fetch(`${API_BASE}/api/subscriptions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        customerName:    S.userName,
-        customerPhone:   '01012345678',   // ← 실제 전화번호
-        customerEmail:   'axa@test.com',
-        birthDate:       '1990-01-01',
-        plateNumber:     veh.plate,
-        modelName:       veh.name,
-        grade:           '프리미엄',
-        driveType:       S.driveType || '자가용',
-        driverScope:     S.driverScope,
-        startDate:       '2026-04-14',
-        endDate:         '2027-04-14',
-        premium:         PRICE.pay,
-        payMethod:       S.payMethod,
-        specialMileage:  S.specials[0],
-        specialBlackbox: S.specials[1],
-        specialChild:    S.specials[2],
-      })
-    });
-
-    const result = await res.json();
-    console.log('API 응답:', result);  // ← 확인용
-
-    if(result.success){
-      // API 성공 시 localStorage에도 저장
-      savePolicy({
-        type:      'AXA 다이렉트 자동차보험',
-        vehicle:   result.data.vehicleModel,
-        plate:     result.data.plateNumber,
-        insured:   result.data.customerName,
-        driverScope: result.data.driverScope,
-        startDate:  result.data.startDate,
-        endDate:    result.data.endDate,
-        premium:    result.data.premium,
-        policyNo:   result.data.policyNo,
-        signedAt:   new Date().toLocaleDateString('ko-KR'),
-        specials:   SPECIALS.filter((_,i)=>S.specials[i]),
-        payMethod:  result.data.payMethod,
-      });
-      alert('청약이 완료됐어요! 🎉');
-    }
-  } catch(e) {
-    console.error('API 오류:', e);
-    alert('API 연결 실패: ' + e.message);
-  }
-
+  const policy = {
+    type:'AXA 다이렉트 자동차보험',
+    vehicle: veh.name,
+    plate: veh.plate,
+    insured: S.userName,
+    driverScope: S.driverScope,
+    startDate:'2023.08.08', endDate:'2024.08.08',
+    premium: PRICE.pay,
+    policyNo:`AXA-2023-${String(Math.floor(Math.random()*999999)).padStart(6,'0')}`,
+    signedAt: new Date().toLocaleDateString('ko-KR'),
+    specials: SPECIALS.filter((_,i)=>S.specials[i]),
+    payMethod: S.payMethod,
+  };
+  savePolicy(policy);
+  // Reset step state
   Object.assign(S,{step:1,terms1:[],selectedV:1,plate:'',driveType:'',
     driverScope:'부부',specials:[false,false,false],terms7:[],payMethod:'일반카드',
     cardHolder:'김악사',cardNum:['1234','5678','9101','1234'],expiry:'',cvc:'',installment:'일시불'});
@@ -1360,45 +1321,24 @@ function s9(){
 /* ─────────────────────────────────────────
    MY PAGE RENDER
 ───────────────────────────────────────── */
-async function renderMyPage(){
-  // API에서 조회 시도
-  try {
-    const res = await fetch(`${API_BASE}/api/subscriptions/my?phone=01012345678`);
-    const result = await res.json();
-    console.log('마이페이지 API 응답:', result);
-
-    if(result.success && result.data.length > 0){
-      // API 데이터를 localStorage에 동기화
-      localStorage.removeItem('axa_policies');  // 기존 데이터 초기화
-      result.data.forEach(p => {
-        savePolicy({
-          type:       'AXA 다이렉트 자동차보험',
-          vehicle:    p.vehicleModel,
-          plate:      p.plateNumber,
-          insured:    p.customerName,
-          driverScope: p.driverScope,
-          startDate:  p.startDate,
-          endDate:    p.endDate,
-          premium:    p.premium,
-          policyNo:   p.policyNo,
-          signedAt:   p.createdAt?.split('T')[0],
-          specials:   [
-            p.specialMileage  ? '마일리지 특약'  : null,
-            p.specialBlackbox ? '블랙박스 특약'  : null,
-            p.specialChild    ? '자녀 할인 특약' : null,
-          ].filter(Boolean),
-          payMethod:  p.payMethod,
-        });
-      });
-    }
-  } catch(e) {
-    console.log('API 조회 실패, localStorage 사용:', e);
-  }
-
-  const p = policies[0]; // 최신 보험
+function renderMyPage(){
   const policies = loadPolicies();
   const wrap = document.getElementById('myCardWrap');
   const detail = document.getElementById('myDetailSection');
+
+  if(policies.length===0){
+    wrap.innerHTML=`
+      <div class="empty-state">
+        <div class="empty-icon">🚗</div>
+        <div class="empty-title">가입된 보험이 없어요</div>
+        <div class="empty-desc">AXA 다이렉트 자동차보험에<br/>지금 바로 가입해보세요!</div>
+        <button class="btn btn-p" style="margin-top:0" onclick="goSubscription()">🚀 청약 시작하기</button>
+      </div>`;
+    detail.style.display='none';
+    return;
+  }
+
+  const p = policies[0]; // 최신 보험
 
   // Insurance Card (credit-card style)
   wrap.innerHTML=`
